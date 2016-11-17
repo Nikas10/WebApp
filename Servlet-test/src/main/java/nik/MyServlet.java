@@ -32,9 +32,11 @@ public class MyServlet extends HttpServlet {
         out.println("<h1>Hello Servlet 1111111</h1>");
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            String dbURL = "jdbc:sqlite:G://JAVA DEV/ForumDB.sqlite";
-            Connection conn = DriverManager.getConnection(dbURL);
+            Class.forName("org.postgresql.Driver");
+            String dbURL = "jdbc:postgresql://localhost:5432/ForumDB";
+            String user = "admin";
+            String pass = "1q2w3e";
+            Connection conn = DriverManager.getConnection(dbURL, user, pass);
             if (conn != null) {
                 out.println("Connected to the database");
                 DatabaseMetaData dm = (DatabaseMetaData) conn.getMetaData();
