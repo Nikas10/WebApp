@@ -1,4 +1,7 @@
 package nik;
+import org.hibernate.Session;
+import util.HibernateSessionFactory;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +34,7 @@ public class MyServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         out.println("<h1>Hello Servlet 1111111</h1>");
 
-        try {
+        /*try {
             Class.forName("org.postgresql.Driver");
             String dbURL = "jdbc:postgresql://localhost:5432/ForumDB";
             String user = "admin";
@@ -51,6 +54,13 @@ public class MyServlet extends HttpServlet {
             e.printStackTrace(out);
         } catch (SQLException e) {
             e.printStackTrace(out);
-        }
+        }*/
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+
+        session.beginTransaction();
+        out.println("NO error message");
+        session.getTransaction().commit();
+
+        session.close();
     }
 }
