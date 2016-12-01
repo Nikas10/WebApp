@@ -1,6 +1,7 @@
 package com.Nikas.service.impl;
 
 import com.Nikas.entity.user;
+
 import com.Nikas.repo.UserRepo;
 import com.Nikas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import java.util.UUID;
 @Service("UserService")
 @Transactional
 public class userServiceImpl implements UserService {
+
     @Autowired
     private UserRepo usrRepo;
+
     @Override
     public user addUser(user usr)
     {

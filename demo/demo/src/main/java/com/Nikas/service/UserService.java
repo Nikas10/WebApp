@@ -9,6 +9,7 @@ import java.util.UUID;
  * Created by Nikas on 01.12.2016.
  */
 public interface UserService {
+
     user addUser(user usr);
     void deleteUser(UUID id);
     user getByName(String name);
