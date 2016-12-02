@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -49,28 +50,38 @@ public class LoginController
         else return "{}";
     }
     @RequestMapping(value = "/reguser")//ADD POST LATER!
-    public String register(@RequestParam(value="name", required=false, defaultValue="sampleuser") String name,@RequestParam(value="pass", required=false, defaultValue="1q2w3e") String pass)
+    public String register(@RequestParam(value="name", required=false, defaultValue="sampleuser") String name,
+                           @RequestParam(value="pass", required=false, defaultValue="1q2w3e") String pass,
+                           @RequestParam(value="mail", required=false, defaultValue="") String mail )
     {
         String response;
-        checker.setName(name);
-        checker.setPass(pass);
+        //checker.setName(name);
+        //checker.setPass(pass);
         user dbo = usi.getByName(name);
         if (dbo!=null) return "User already exists!";
-        else
-        {
-            UUID newid;
-            dbo.setLevel(1);
+        dbo=new user();
+        UUID newid;
+        try {
+            dbo.setMail(mail);
+            dbo.setName(name);
+            dbo.setPassword(pass);
             newid=UUID.randomUUID();
             dbo.setUid(newid);
-            usi.addUser(dbo);
-            return "success!";
+            Integer lvl = 1;
+            dbo.setLevel(lvl);
         }
+        catch(NullPointerException ex)
+        {
+             ex.printStackTrace();
+        }
+        usi.addUser(dbo);
+        return "success!";
     }
 
     @RequestMapping(value = "/upuser") //ADD POST LATER!
-    public String update(@RequestParam(value="uuid", required=false, defaultValue="") String uuid,
-                         @RequestParam(value="name", required=false, defaultValue="") String name,
-                         @RequestParam(value="pass", required=false, defaultValue="") String pass,
+    public String update(@RequestParam(value="uuid", required=true, defaultValue="") String uuid,
+                         @RequestParam(value="name", required=true, defaultValue="") String name,
+                         @RequestParam(value="pass", required=true, defaultValue="") String pass,
                          @RequestParam(value="mail", required=false, defaultValue="") String mail,
                          @RequestParam(value="coutry", required=false, defaultValue="") String country,
                          @RequestParam(value="time", required=false, defaultValue="") Integer timezone,
@@ -81,19 +92,18 @@ public class LoginController
         dbo = usi.getByUid(UUID.fromString(uuid));
         if (dbo==null) return "No such user!";
         user checks = usi.getByName(name);
+        if ((checks!=null)&&(!checks.getName().equals(dbo.getName())))
         if ((checks!=null)&&(checks.getName().equals(name)))return "User with that name exists!";
-        else
-        {
-           if (!name.equals(""))dbo.setName(name);
-           if (!pass.equals(""))dbo.setPassword(pass);
-            dbo.setMail(mail);
-            dbo.setCountry(country);
-            dbo.setTimezone(timezone);
-            dbo.setLanguage(language);
-            dbo.setAbout(about);
-            usi.editUser(dbo);
-            return "Success!";
-        }
+        if ((name!=null)&&(!name.equalsIgnoreCase("")))dbo.setName(name);
+        if ((pass!=null)&&(!pass.equalsIgnoreCase("")))dbo.setPassword(pass);
+        dbo.setMail(mail);
+        dbo.setCountry(country);
+        dbo.setTimezone(timezone);
+        dbo.setLanguage(language);
+        dbo.setAbout(about);
+        usi.editUser(dbo);
+        return "Success!";
+
     }
 
     @RequestMapping(value = "/deluser")// ADD POST LATER
@@ -109,6 +119,29 @@ public class LoginController
             {
                 usi.deleteUser(todel.getUid());return;}else
                     return;
+    }
+
+    @RequestMapping(value = "/moduserlvl")// ADD POST LATER
+    public void modlevel(@RequestParam(value="name", required=true, defaultValue="") String name,
+                         @RequestParam(value="uuid", required=true, defaultValue="") String uuid,
+                         @RequestParam(value="lvl", required=true, defaultValue="") Integer level)
+    {
+        //checker.setName(name);
+        user dbo = new user();
+        user todel = new user();
+        dbo = usi.getByUid(UUID.fromString(uuid));
+        todel=usi.getByName(name);
+        if (dbo.getLevel()>1)
+            if (name.equals(todel.getName()))
+            {
+                System.out.println(level);
+                if (level==null)todel.setLevel(0);else
+                if (level<2) {
+                    todel.setLevel(level);
+                }
+                usi.editUser(todel);return;
+            }else
+                return;
     }
 
     @RequestMapping(value = "/delself")// ADD POST LATER

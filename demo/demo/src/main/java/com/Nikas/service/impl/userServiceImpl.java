@@ -46,7 +46,8 @@ public class userServiceImpl implements UserService {
     @Override
     public user editUser(user usr)
     {
-        return usrRepo.saveAndFlush(usr);
+        user usre =usrRepo.saveAndFlush(usr);
+        return usre;
     };
     @Override
     public List<user> getAll()

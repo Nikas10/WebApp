@@ -20,19 +20,14 @@ public class user implements Serializable {
     private String password;
     @Column (name = "level")
     private Integer level;
-    @Nullable
     @Column (name = "mail")
     private String mail;
-    @Nullable
     @Column (name = "country")
     private String country;
-    @Nullable
     @Column (name = "timezone")
     private Integer timezone;
-    @Nullable
     @Column (name = "language")
     private String language;
-    @Nullable
     @Column (name = "about")
     private String about;
     public user(){};
@@ -93,7 +88,7 @@ public class user implements Serializable {
 
     public String getAbout()
     {return about;}
-    public void setAbout(String about)
-    {about = about;}
+    public void setAbout(String About)
+    {about = About;}
 
 }
