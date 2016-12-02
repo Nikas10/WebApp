@@ -1,7 +1,5 @@
 package com.Nikas.entity;
 
-import com.sun.istack.internal.Nullable;
-
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.*;
