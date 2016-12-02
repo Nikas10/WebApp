@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 public interface UserService {
 
+    user getByUid(UUID id);
     user addUser(user usr);
     void deleteUser(UUID id);
     user getByName(String name);

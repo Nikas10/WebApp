@@ -23,6 +23,11 @@ public class userServiceImpl implements UserService {
     private UserRepo usrRepo;
 
     @Override
+    public user getByUid(UUID id)
+    {
+        return usrRepo.getOne(id);
+    };
+    @Override
     public user addUser(user usr)
     {
         user user = usrRepo.saveAndFlush(usr);
