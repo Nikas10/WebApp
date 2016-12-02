@@ -1,6 +1,7 @@
 package com.Nikas.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 /**
@@ -28,6 +29,9 @@ public class user implements Serializable {
     private String language;
     @Column (name = "about")
     private String about;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr")
+    private Set<message> publicmsgs;
+
     public user(){};
     public user(UUID id, String usr, String pass)
     {
@@ -35,6 +39,8 @@ public class user implements Serializable {
         this.name = usr;
         this.password=pass;
     };
+    public Set<message> getPublicmsgs(){return publicmsgs;}
+    public void setPublicmsgs(Set<message> msgs){publicmsgs=msgs;}
 
     public UUID getUid()
     {return uid;}

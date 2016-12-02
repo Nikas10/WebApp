@@ -3,6 +3,7 @@ package com.Nikas.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * Created by Nikas on 02.12.2016.
@@ -15,8 +16,9 @@ public class topic implements Serializable {
     @Column(name="tid")
     private Integer tid;
 
-    @Column(name="sid")
-    private Integer sid;
+    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinColumn(name="sid", nullable = false)
+    private section sectid;
 
     @Column(name="name")
     private String name;
@@ -30,10 +32,15 @@ public class topic implements Serializable {
     @Column(name="status")
     private Boolean status;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tpc")
+    private Set<message> msgs;
+
+    public Set<message> getMsgs(){return msgs;}
+    public void setMsgs(Set<message> msg){msgs=msg;}
     public Integer getTid(){return tid;}
     public void setTid(Integer id){tid=id;}
-    public Integer getSid(){return sid;}
-    public void setSid(Integer id){sid=id;}
+    public section getSectid(){return sectid;}
+    public void setSectid(section id){sectid=id;}
     public Timestamp getDate(){return date;}
     public void setParent(Timestamp da){date=da;}
     public String getName(){return name;}
