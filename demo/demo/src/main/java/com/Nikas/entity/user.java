@@ -1,5 +1,7 @@
 package com.Nikas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
@@ -29,8 +31,16 @@ public class user implements Serializable {
     private String language;
     @Column (name = "about")
     private String about;
+
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr")
     private Set<message> publicmsgs;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
+    private Set<privatemessage> receivedmessages;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
+    private Set<privatemessage> sendedmessages;
 
     public user(){};
     public user(UUID id, String usr, String pass)
@@ -39,6 +49,10 @@ public class user implements Serializable {
         this.name = usr;
         this.password=pass;
     };
+    public Set<privatemessage> getReceivedmessages(){return receivedmessages;}
+    public void setReceivedmessages(Set<privatemessage> pm){receivedmessages = pm;}
+    public Set<privatemessage> getSendedmessages(){return sendedmessages;}
+    public void setSendedmessages(Set<privatemessage> pm){sendedmessages = pm;}
     public Set<message> getPublicmsgs(){return publicmsgs;}
     public void setPublicmsgs(Set<message> msgs){publicmsgs=msgs;}
 
