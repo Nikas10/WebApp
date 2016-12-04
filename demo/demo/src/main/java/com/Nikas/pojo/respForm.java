@@ -12,7 +12,7 @@ public class respForm {
     private String status;
     private String errortype;
     private String message;
-    private List<?> content;
+    private List<? extends Serializable> content;
 
     public String getStatus(){return status;};
     public String getErrortype(){return errortype;};
@@ -20,7 +20,7 @@ public class respForm {
     public void setStatus(String st){status=st;};
     public void setErrortype(String et){errortype=et;};
     public void setMessage(String m){message=m;};
-    public List<?> getContent(){return content;}
+    public List<? extends Serializable> getContent(){return content;}
     public void setContent(List<? extends Serializable> cont){content=cont;}
     public respForm(){};
 }

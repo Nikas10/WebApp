@@ -2,6 +2,7 @@ package com.Nikas.service.impl;
 
 import com.Nikas.entity.user;
 
+import com.Nikas.pojo.respForm;
 import com.Nikas.repo.UserRepo;
 import com.Nikas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,35 @@ public class userServiceImpl implements UserService {
     public List<user> getAll()
     {
         return (List<user>)usrRepo.findAll();
+    };
+
+    @Override
+    public respForm checkLogindata(String name, String pass) //ready
+    {
+        respForm rf = new respForm();
+        user dbo = usrRepo.findByName(name);
+        if (dbo!=null)
+        {
+            if (!pass.equals(dbo.getPassword()))
+            {
+                rf.setStatus("error");
+                rf.setErrortype("LoginError");
+                rf.setMessage("Your password or username is invalid.");
+                return rf;
+            }
+            else
+            {
+                rf.setStatus("success");
+                rf.setErrortype("none");
+                rf.setMessage("Login successful.");
+                return rf;
+            }
+        }
+        {
+            rf.setStatus("error");
+            rf.setErrortype("NoUserError");
+            rf.setMessage("User not found. Check your username or register.");
+            return rf;
+        }
     };
 }

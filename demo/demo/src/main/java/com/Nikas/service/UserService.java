@@ -1,6 +1,7 @@
 package com.Nikas.service;
 
 import com.Nikas.entity.user;
+import com.Nikas.pojo.respForm;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,4 +18,5 @@ public interface UserService {
     user getByName(String name);
     user editUser(user usr);
     List<user> getAll();
+    respForm checkLogindata(String name, String pass);
 }

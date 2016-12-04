@@ -1,6 +1,8 @@
 package com.Nikas.service.impl;
 
 import com.Nikas.entity.section;
+import com.Nikas.entity.user;
+import com.Nikas.pojo.respForm;
 import com.Nikas.repo.SectionRepo;
 import com.Nikas.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +39,7 @@ public class sectionServiceImpl implements SectionService {
     @Override
     public  List<section>getAll()
     {return (List<section>)sectRepo.findAll();};
+
+    /**/
+
 }

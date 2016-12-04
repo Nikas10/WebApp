@@ -1,7 +1,6 @@
 package com.Nikas.Servlet;
 
 
-import com.Nikas.Servlet.utils.Helper;
 import com.Nikas.entity.user;
 import com.Nikas.pojo.logForm;
 import com.Nikas.pojo.respForm;
@@ -26,35 +25,6 @@ public class LoginController
     public logForm lf = new logForm();
     public respForm rf = new respForm();
 
-    public respForm checkLogindata(String name, String pass) //ready
-{
-    user dbo = usi.getByName(name);
-    if (dbo!=null)
-    {
-        if (!pass.equals(dbo.getPassword()))
-        {
-            rf.setStatus("error");
-            rf.setErrortype("LoginError");
-            rf.setMessage("Your password or username is invalid.");
-            return rf;
-        }
-        else
-        {
-            rf.setStatus("success");
-            rf.setErrortype("none");
-            rf.setMessage("Login successful.");
-            return rf;
-        }
-    }
-    {
-        rf.setStatus("error");
-        rf.setErrortype("NoUserError");
-        rf.setMessage("User not found. Check your username or register.");
-        return rf;
-    }
-};
-
-
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     public String login(HttpServletRequest loginForm) throws JsonProcessingException //ready
     {
@@ -62,7 +32,7 @@ public class LoginController
         lf.setName(loginForm.getParameter("name"));
         if (loginForm.getParameter("pass")==null) lf.setPass(""); else
         lf.setPass(loginForm.getParameter("pass"));
-        rf = checkLogindata(lf.getName(),lf.getPass());
+        rf = usi.checkLogindata(lf.getName(),lf.getPass());
         ObjectMapper obm = new ObjectMapper();
         if (rf.getStatus().equals("success"))
         {
@@ -138,7 +108,7 @@ public class LoginController
         lf.setName(upForm.getParameter("name"));
         if (upForm.getParameter("pass")==null) lf.setPass(""); else
         lf.setPass(upForm.getParameter("pass"));
-        rf = checkLogindata(lf.getName(),lf.getPass());
+        usi.checkLogindata(lf.getName(),lf.getPass());
         if (rf.getStatus().equals("error"))
         {
            return obm.writeValueAsString(rf);
@@ -214,7 +184,7 @@ public class LoginController
             rf.setMessage("Some required fields are empty.");
             return obm.writeValueAsString(rf);
         }
-        rf = checkLogindata(lf.getName(),lf.getPass());
+        usi.checkLogindata(lf.getName(),lf.getPass());
         if (rf.getStatus().equals("error"))
         {
             return obm.writeValueAsString(rf);
@@ -271,7 +241,7 @@ public class LoginController
             rf.setMessage("Some required fields are empty.");
             return obm.writeValueAsString(rf);
         }
-        rf = checkLogindata(lf.getName(),lf.getPass());
+        usi.checkLogindata(lf.getName(),lf.getPass());
         if (rf.getStatus().equals("error"))
         {
             return obm.writeValueAsString(rf);
@@ -322,7 +292,7 @@ public class LoginController
             rf.setMessage("Some required fields are empty.");
             return obm.writeValueAsString(rf);
         }
-        rf = checkLogindata(lf.getName(),lf.getPass());
+        usi.checkLogindata(lf.getName(),lf.getPass());
         if (rf.getStatus().equals("error"))
         {
             return obm.writeValueAsString(rf);
