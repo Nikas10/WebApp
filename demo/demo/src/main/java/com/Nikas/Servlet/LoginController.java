@@ -1,6 +1,7 @@
 package com.Nikas.Servlet;
 
 
+import com.Nikas.Servlet.utils.Helper;
 import com.Nikas.entity.user;
 import com.Nikas.pojo.logForm;
 import com.Nikas.pojo.respForm;
@@ -19,7 +20,6 @@ import java.util.UUID;
 @RestController
 public class LoginController
 {
-
     @Resource(name="UserService")
     userServiceImpl usi;
 
@@ -27,32 +27,32 @@ public class LoginController
     public respForm rf = new respForm();
 
     public respForm checkLogindata(String name, String pass) //ready
+{
+    user dbo = usi.getByName(name);
+    if (dbo!=null)
     {
-        user dbo = usi.getByName(name);
-        if (dbo!=null)
-        {
-            if (!pass.equals(dbo.getPassword()))
-            {
-                rf.setStatus("error");
-                rf.setErrortype("LoginError");
-                rf.setMessage("Your password or username is invalid.");
-                return rf;
-            }
-            else
-            {
-                rf.setStatus("success");
-                rf.setErrortype("none");
-                rf.setMessage("Login successful.");
-                return rf;
-            }
-        }
+        if (!pass.equals(dbo.getPassword()))
         {
             rf.setStatus("error");
-            rf.setErrortype("NoUserError");
-            rf.setMessage("User not found. Check your username or register.");
+            rf.setErrortype("LoginError");
+            rf.setMessage("Your password or username is invalid.");
             return rf;
         }
-    };
+        else
+        {
+            rf.setStatus("success");
+            rf.setErrortype("none");
+            rf.setMessage("Login successful.");
+            return rf;
+        }
+    }
+    {
+        rf.setStatus("error");
+        rf.setErrortype("NoUserError");
+        rf.setMessage("User not found. Check your username or register.");
+        return rf;
+    }
+};
 
 
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)

@@ -13,6 +13,7 @@ public class respForm {
     private String errortype;
     private String message;
     private List<?> content;
+
     public String getStatus(){return status;};
     public String getErrortype(){return errortype;};
     public String getMessage(){return message;};
@@ -21,6 +22,5 @@ public class respForm {
     public void setMessage(String m){message=m;};
     public List<?> getContent(){return content;}
     public void setContent(List<? extends Serializable> cont){content=cont;}
-    //public void addContent( <? extends Serializable> cont){content.add(cont);}
     public respForm(){};
 }
