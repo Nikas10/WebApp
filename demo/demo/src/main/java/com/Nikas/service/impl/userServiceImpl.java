@@ -44,6 +44,11 @@ public class userServiceImpl implements UserService {
         return usrRepo.findByName(name);
     };
     @Override
+    public user getByMail(String mail)
+    {
+        return usrRepo.findByMail(mail);
+    }
+    @Override
     public user editUser(user usr)
     {
         user usre =usrRepo.saveAndFlush(usr);

@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by Nikas on 02.12.2016.
  */
-public interface SessionRepo extends JpaRepository<section, Integer> {
-
+public interface SectionRepo extends JpaRepository<section, Integer> {
+    section findByName(String name);
 }

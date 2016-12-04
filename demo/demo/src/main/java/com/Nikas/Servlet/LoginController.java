@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -21,8 +23,8 @@ public class LoginController
     @Resource(name="UserService")
     userServiceImpl usi;
 
-    public logForm lf=new logForm();
-    public respForm rf=new respForm();
+    public logForm lf = new logForm();
+    public respForm rf = new respForm();
 
     public respForm checkLogindata(String name, String pass) //ready
     {
@@ -65,7 +67,11 @@ public class LoginController
         if (rf.getStatus().equals("success"))
         {
             user dbo = usi.getByName(lf.getName());
-            return obm.writeValueAsString(dbo);
+            List<user> userList;
+            userList = new ArrayList<>();
+            userList.add(dbo);
+            rf.setContent(userList);
+            return obm.writeValueAsString(rf);
         }
         else
             return obm.writeValueAsString(rf);
@@ -74,32 +80,41 @@ public class LoginController
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
     public String register(HttpServletRequest regForm) throws JsonProcessingException //ready
     {
-        if (regForm.getParameter("name")==null) lf.setName(""); else
-        lf.setName(regForm.getParameter("name"));
-        if (regForm.getParameter("pass")==null) lf.setPass(""); else
-        lf.setPass(regForm.getParameter("pass"));
+        if (regForm.getParameter("name") == null) lf.setName("");
+        else
+            lf.setName(regForm.getParameter("name"));
+        if (regForm.getParameter("pass") == null) lf.setPass("");
+        else
+            lf.setPass(regForm.getParameter("pass"));
         String mail;
-        if (regForm.getParameter("mail")==null) mail=""; else
-        mail = regForm.getParameter("mail");
+        if (regForm.getParameter("mail") == null) mail = "";
+        else
+            mail = regForm.getParameter("mail");
 
         user dbo = usi.getByName(lf.getName());
         ObjectMapper obm = new ObjectMapper();
-        if (dbo!=null)
-        {
+        if (dbo != null) {
             rf.setStatus("error");
             rf.setErrortype("UserExistsError");
             rf.setMessage("User with that name already exists.");
             return obm.writeValueAsString(rf);
         }
-        if ((mail.equals(""))||(lf.getPass().equals("")))
-        {
+        if ((mail.equals("")) || (lf.getPass().equals(""))) {
             rf.setStatus("error");
             rf.setErrortype("NotEnoughDataError");
             rf.setMessage("Some required fields are empty.");
             return obm.writeValueAsString(rf);
         }
         dbo = new user();
-        UUID newid=UUID.randomUUID();
+        UUID newid = UUID.randomUUID();
+        user check = usi.getByMail(mail);
+        if (check != null)
+        {
+            rf.setStatus("error");
+            rf.setErrortype("UserExistsError");
+            rf.setMessage("User with that mail already exists.");
+            return obm.writeValueAsString(rf);
+        }
         dbo.setMail(mail);
         dbo.setName(lf.getName());
         dbo.setPassword(lf.getPass());
@@ -158,10 +173,19 @@ public class LoginController
             dbo.setPassword(npass);
         }
         if (!upForm.getParameter("mail").equals("")) {
+            user check = usi.getByMail(upForm.getParameter("mail"));
+            if (check == null)
+            {
+                rf.setStatus("error");
+                rf.setErrortype("UserExistsError");
+                rf.setMessage("User with that mail already exists.");
+                return obm.writeValueAsString(rf);
+            }
             dbo.setMail(upForm.getParameter("mail"));
         }
         dbo.setCountry(upForm.getParameter("country"));
         dbo.setLanguage(upForm.getParameter("language"));
+        if (upForm.getParameter("timezone")!=null)
         if (!upForm.getParameter("timezone").equals(""))
         dbo.setTimezone(Integer.parseInt(upForm.getParameter("timezone")));
         dbo.setAbout(upForm.getParameter("about"));

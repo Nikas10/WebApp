@@ -3,7 +3,7 @@ package com.Nikas.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 /**
@@ -34,13 +34,13 @@ public class user implements Serializable {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr")
-    private Set<message> publicmsgs;
+    private List<message> publicmsgs;
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
-    private Set<privatemessage> receivedmessages;
+    private List<privatemessage> receivedmessages;
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
-    private Set<privatemessage> sendedmessages;
+    private List<privatemessage> sendedmessages;
 
     public user(){};
     public user(UUID id, String usr, String pass)
@@ -49,12 +49,12 @@ public class user implements Serializable {
         this.name = usr;
         this.password=pass;
     };
-    public Set<privatemessage> getReceivedmessages(){return receivedmessages;}
-    public void setReceivedmessages(Set<privatemessage> pm){receivedmessages = pm;}
-    public Set<privatemessage> getSendedmessages(){return sendedmessages;}
-    public void setSendedmessages(Set<privatemessage> pm){sendedmessages = pm;}
-    public Set<message> getPublicmsgs(){return publicmsgs;}
-    public void setPublicmsgs(Set<message> msgs){publicmsgs=msgs;}
+    public List<privatemessage> getReceivedmessages(){return receivedmessages;}
+    public void setReceivedmessages(List<privatemessage> pm){receivedmessages = pm;}
+    public List<privatemessage> getSendedmessages(){return sendedmessages;}
+    public void setSendedmessages(List<privatemessage> pm){sendedmessages = pm;}
+    public List<message> getPublicmsgs(){return publicmsgs;}
+    public void setPublicmsgs(List<message> msgs){publicmsgs=msgs;}
 
     public UUID getUid()
     {return uid;}

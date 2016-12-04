@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 public interface UserService {
 
+    user getByMail(String mail);
     user getByUid(UUID id);
     user addUser(user usr);
     void deleteUser(UUID id);

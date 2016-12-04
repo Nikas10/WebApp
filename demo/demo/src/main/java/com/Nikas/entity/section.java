@@ -4,6 +4,7 @@ package com.Nikas.entity;
  * Created by Nikas on 02.12.2016.
  */
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -26,15 +27,15 @@ public class section implements Serializable{
     private String description;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sectid")
-    private Set<topic> topics;
+    private List<topic> topics;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "parsect")
-    private Set<section> sections;
+    private List<section> sections;
 
-    public Set<section> getSections(){return sections;}
-    public void setSections(Set<section> scs){sections=scs;}
-    public Set<topic> getTopics(){return topics;}
-    public void setTopics(Set<topic> tpc){topics=tpc;}
+    public List<section> getSections(){return sections;}
+    public void setSections(List<section> scs){sections=scs;}
+    public List<topic> getTopics(){return topics;}
+    public void setTopics(List<topic> tpc){topics=tpc;}
     public Integer getSid(){return sid;}
     public void setSid(Integer id){sid=id;}
     public section getParsect(){return parsect;}

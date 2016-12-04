@@ -1,5 +1,8 @@
 package com.Nikas.pojo;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by Nikas on 04.12.2016.
  */
@@ -9,11 +12,15 @@ public class respForm {
     private String status;
     private String errortype;
     private String message;
+    private List<?> content;
     public String getStatus(){return status;};
     public String getErrortype(){return errortype;};
     public String getMessage(){return message;};
     public void setStatus(String st){status=st;};
     public void setErrortype(String et){errortype=et;};
     public void setMessage(String m){message=m;};
+    public List<?> getContent(){return content;}
+    public void setContent(List<? extends Serializable> cont){content=cont;}
+    //public void addContent( <? extends Serializable> cont){content.add(cont);}
     public respForm(){};
 }

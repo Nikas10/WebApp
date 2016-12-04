@@ -3,6 +3,7 @@ package com.Nikas.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,10 +34,10 @@ public class topic implements Serializable {
     private Boolean status;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tpc")
-    private Set<message> msgs;
+    private List<message> msgs;
 
-    public Set<message> getMsgs(){return msgs;}
-    public void setMsgs(Set<message> msg){msgs=msg;}
+    public List<message> getMsgs(){return msgs;}
+    public void setMsgs(List<message> msg){msgs=msg;}
     public Integer getTid(){return tid;}
     public void setTid(Integer id){tid=id;}
     public section getSectid(){return sectid;}
