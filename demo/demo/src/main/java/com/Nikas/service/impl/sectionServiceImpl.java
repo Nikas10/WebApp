@@ -24,6 +24,12 @@ public class sectionServiceImpl implements SectionService {
     @Override
     public section getBySid(Integer id)
     {return sectRepo.getOne(id);};
+
+    @Override
+    public List<section> getByParsect(section parent)
+    {
+        return sectRepo.findByParsect(parent);
+    }
     @Override
     public section getByName(String name)
     {return  sectRepo.findByName(name);};
@@ -40,6 +46,5 @@ public class sectionServiceImpl implements SectionService {
     public  List<section>getAll()
     {return (List<section>)sectRepo.findAll();};
 
-    /**/
 
 }

@@ -3,6 +3,8 @@ package com.Nikas.entity;
 /**
  * Created by Nikas on 02.12.2016.
  */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -16,8 +18,9 @@ public class section implements Serializable{
     @Column(name="sid")
     private Integer sid;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="parent")
+    @JsonIgnore
     private section parsect;
 
     @Column(name="name")
@@ -26,10 +29,12 @@ public class section implements Serializable{
     @Column(name="description")
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sectid")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sectid", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<topic> topics;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "parsect")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "parsect", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<section> sections;
 
     public List<section> getSections(){return sections;}

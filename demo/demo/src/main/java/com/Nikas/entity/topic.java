@@ -17,7 +17,7 @@ public class topic implements Serializable {
     @Column(name="tid")
     private Integer tid;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sid", nullable = false)
     private section sectid;
 

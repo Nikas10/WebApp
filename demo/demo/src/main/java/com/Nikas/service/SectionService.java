@@ -15,4 +15,5 @@ public interface SectionService {
    void deleteSection(Integer section);
    section editSection(section sect);
    List<section> getAll();
+   List<section> getByParsect(section parent);
 }

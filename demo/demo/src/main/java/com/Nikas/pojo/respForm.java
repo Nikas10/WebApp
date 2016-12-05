@@ -23,4 +23,7 @@ public class respForm {
     public List<? extends Serializable> getContent(){return content;}
     public void setContent(List<? extends Serializable> cont){content=cont;}
     public respForm(){};
+
+    public void setError(){status = "error";}
+    public void setSuccess(){status="success";}
 }
