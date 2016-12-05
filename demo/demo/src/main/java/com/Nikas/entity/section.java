@@ -14,7 +14,12 @@ import javax.persistence.*;
 @Table(name="section",schema = "private")
 public class section implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    /*@SequenceGenerator(name="section_sid_seq",
+            sequenceName="section_sid_seq",
+            allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator="section_sid_seq")*/
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="sid")
     private Integer sid;
 

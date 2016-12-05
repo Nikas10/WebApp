@@ -33,14 +33,17 @@ public class user implements Serializable {
     private String about;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr",cascade = CascadeType.ALL)
     private List<message> publicmsgs;
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver",cascade = CascadeType.ALL)
     private List<privatemessage> receivedmessages;
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender",cascade = CascadeType.ALL)
     private List<privatemessage> sendedmessages;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator",cascade = CascadeType.ALL)
+    private List<topic> createdtopics;
 
     public user(){};
     public user(UUID id, String usr, String pass)
@@ -49,6 +52,8 @@ public class user implements Serializable {
         this.name = usr;
         this.password=pass;
     };
+    public List<topic> getCreatedtopics(){return createdtopics;}
+    public void setCreatedtopics(List<topic> pm){createdtopics = pm;}
     public List<privatemessage> getReceivedmessages(){return receivedmessages;}
     public void setReceivedmessages(List<privatemessage> pm){receivedmessages = pm;}
     public List<privatemessage> getSendedmessages(){return sendedmessages;}

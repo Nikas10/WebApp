@@ -1,5 +1,7 @@
 package com.Nikas.pojo;
 
+import com.Nikas.pojo.enums.KnownExceptions;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class respForm {
     public String getMessage(){return message;};
     public void setStatus(String st){status=st;};
     public void setErrortype(String et){errortype=et;};
+    public void setErrortype(KnownExceptions et){errortype=et.toString();};
     public void setMessage(String m){message=m;};
     public List<? extends Serializable> getContent(){return content;}
     public void setContent(List<? extends Serializable> cont){content=cont;}

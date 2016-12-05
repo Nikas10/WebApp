@@ -193,7 +193,6 @@ public class SectionController {
         cont.add(check);
         rf.setContent(cont);
         return obm.writeValueAsString(rf);
-
     }
 
     @RequestMapping(value ="/section/getby", method = RequestMethod.POST)
@@ -244,6 +243,87 @@ public class SectionController {
         rf.setMessage("Sections successfully sended.");
         rf.setContent(check);
         return obm.writeValueAsString(rf);
+    }
 
+    @RequestMapping(value ="/section/edit", method = RequestMethod.POST)
+    public String editsection(HttpServletRequest form) throws JsonProcessingException {
+
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("sectname")==null)
+                || (form.getParameter("sectname").equals("")))
+        {
+            rf.setError();
+            rf.setErrortype("NotEnoughDataError");
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<2)
+        {
+            rf.setError();
+            rf.setErrortype("AccessDenyError");
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        section check;
+        check = sectr.getByName(form.getParameter("sectname"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype("NoSectionError");
+            rf.setMessage("Section with the same name does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if ((form.getParameter("newname")!=null)&&(!form.getParameter("newname").equals(""))) {
+            section cc = sectr.getByName(form.getParameter("newname"));
+            if (cc!=null)
+            {
+                rf.setError();
+                rf.setErrortype("SectionExistsError");
+                rf.setMessage("Section with the same name already exists.");
+                return obm.writeValueAsString(rf);
+            }
+            else
+                check.setName(form.getParameter("newname"));
+        }
+        if ((form.getParameter("desc")==null)||(form.getParameter("desc").equals("")))
+        {
+            check.setDescription("");
+        }else
+            check.setDescription(form.getParameter("desc"));
+        if ((form.getParameter("parent")==null)||(form.getParameter("parent").equals("")))
+            check.setParsect(null);
+        else
+        {
+            Integer id = Integer.parseInt(form.getParameter("parent"));
+            check = sectr.getBySid(id);
+            if (check==null)
+            {
+                rf.setError();
+                rf.setErrortype("NoParentError");
+                rf.setMessage("Parent is missing.");
+                return obm.writeValueAsString(rf);
+            }
+            check.setParsect(check);
+        }
+        if ((form.getParameter("desc")==null)||(form.getParameter("desc").equals("")))
+        {check.setDescription("");}else
+            check.setDescription(form.getParameter("desc"));
+
+        sectr.editSection(check);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Section successfully edited.");
+        return obm.writeValueAsString(rf);
     }
 }

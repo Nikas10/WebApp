@@ -13,7 +13,5 @@ import java.util.List;
 public interface SectionRepo extends JpaRepository<section, Integer> {
 
     section findByName(String name);
-
-    @Query(name = "select s from section s where s.parsect = :parsect")
-    List<section> findByParsect(@Param("parsect") section parent);
+    List<section> findByParsect(section parent);
 }

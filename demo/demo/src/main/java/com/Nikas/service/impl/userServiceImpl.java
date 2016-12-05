@@ -2,6 +2,7 @@ package com.Nikas.service.impl;
 
 import com.Nikas.entity.user;
 
+import com.Nikas.pojo.enums.KnownExceptions;
 import com.Nikas.pojo.respForm;
 import com.Nikas.repo.UserRepo;
 import com.Nikas.service.UserService;
@@ -71,21 +72,24 @@ public class userServiceImpl implements UserService {
             if (!pass.equals(dbo.getPassword()))
             {
                 rf.setStatus("error");
-                rf.setErrortype("LoginError");
+                rf.setErrortype(KnownExceptions.LoginException);
+                //rf.setErrortype("LoginError");
                 rf.setMessage("Your password or username is invalid.");
                 return rf;
             }
             else
             {
                 rf.setStatus("success");
-                rf.setErrortype("none");
+                rf.setErrortype(KnownExceptions.none);
+                //rf.setErrortype("none");
                 rf.setMessage("Login successful.");
                 return rf;
             }
         }
         {
             rf.setStatus("error");
-            rf.setErrortype("NoUserError");
+            //rf.setErrortype("NoUserError");
+            rf.setErrortype(KnownExceptions.NoUserException);
             rf.setMessage("User not found. Check your username or register.");
             return rf;
         }
