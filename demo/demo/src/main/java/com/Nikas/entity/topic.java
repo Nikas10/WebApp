@@ -15,17 +15,13 @@ import java.util.Set;
 @Table(name="topic",schema = "private")
 public class topic implements Serializable {
     @Id
-    /*@SequenceGenerator(name="topic_tid_seq",
-            sequenceName="topic_tid_seq",
-            allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator="topic_tid_seq")*/
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="tid")
     private Integer tid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sid", nullable = false)
+    @JsonIgnore
     private section sectid;
 
     @ManyToOne(fetch = FetchType.LAZY)

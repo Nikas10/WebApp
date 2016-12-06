@@ -3,6 +3,8 @@ package com.Nikas.entity;
 /**
  * Created by Nikas on 03.12.2016.
  */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -23,6 +25,7 @@ public class message implements Serializable {
     private user usr;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name="tid",nullable = false)
     private topic tpc;
 
