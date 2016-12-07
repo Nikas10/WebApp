@@ -134,8 +134,8 @@ public class TopicController {
                 || (form.getParameter("name").equals(""))
                 || (form.getParameter("pass") == null)
                 || (form.getParameter("pass").equals(""))
-                || (form.getParameter("topicname")==null)
-                || (form.getParameter("topicname").equals(""))
+                || (form.getParameter("topicid")==null)
+                || (form.getParameter("topicid").equals(""))
                 )
         {
             rf.setError();
@@ -158,7 +158,7 @@ public class TopicController {
             rf.setMessage("You don't have enough rights to do this operation.");
             return obm.writeValueAsString(rf);
         }
-        topic check = tps.getByName(form.getParameter("topicname"));
+        topic check = tps.getByTid(Integer.parseInt(form.getParameter("topicid")));
         if (check==null)
         {
             rf.setError();
@@ -187,8 +187,8 @@ public class TopicController {
                 || (form.getParameter("name").equals(""))
                 || (form.getParameter("pass") == null)
                 || (form.getParameter("pass").equals(""))
-                || (form.getParameter("topicname")==null)
-                || (form.getParameter("topicname").equals(""))
+                || (form.getParameter("topicid")==null)
+                || (form.getParameter("topicid").equals(""))
                 )
         {
             rf.setError();
@@ -211,7 +211,7 @@ public class TopicController {
             rf.setMessage("You don't have enough rights to do this operation.");
             return obm.writeValueAsString(rf);
         }
-        topic check = tps.getByName(form.getParameter("topicname"));
+        topic check = tps.getByTid(Integer.parseInt(form.getParameter("topicid")));
         if (check==null)
         {
             rf.setError();

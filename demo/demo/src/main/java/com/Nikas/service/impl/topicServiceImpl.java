@@ -23,7 +23,7 @@ public class topicServiceImpl implements TopicService{
 
     @Override
     public topic getByTid(Integer id)
-    {return topRepo.getOne(id);};
+    {return topRepo.findOne(id);};
     @Override
     public topic getByName(String name)
     {return topRepo.findByName(name);};

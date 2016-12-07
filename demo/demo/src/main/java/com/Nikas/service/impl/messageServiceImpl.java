@@ -1,7 +1,6 @@
 package com.Nikas.service.impl;
 
 import com.Nikas.entity.message;
-import com.Nikas.entity.section;
 import com.Nikas.entity.topic;
 import com.Nikas.entity.user;
 import com.Nikas.repo.MessageRepo;
@@ -25,7 +24,7 @@ public class messageServiceImpl implements MessageService
     @Override
     public message getByPmid(Integer id)
     {
-        return mrp.getOne(id);
+        return mrp.findOne(id);
     };
     @Override
     public List<message> getByTid(topic sect)

@@ -15,6 +15,8 @@ import java.util.List;
  * Created by Nikas on 04.12.2016.
  */
 
+@Service("SectionService")
+@Transactional
 
 public class sectionServiceImpl implements SectionService {
     @Autowired
