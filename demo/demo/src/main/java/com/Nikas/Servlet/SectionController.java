@@ -147,7 +147,7 @@ public class SectionController {
         return obm.writeValueAsString(rf);
     }
 
-    @RequestMapping(value ="/section/getone", method = RequestMethod.POST)
+    @RequestMapping(value ="/section/get/name", method = RequestMethod.POST)
     public String getsection(HttpServletRequest form) throws JsonProcessingException
     {
         if      (  (form.getParameter("name") == null)
@@ -195,7 +195,7 @@ public class SectionController {
         return obm.writeValueAsString(rf);
     }
 
-    @RequestMapping(value ="/section/getby", method = RequestMethod.POST)
+    @RequestMapping(value ="/section/get/parent", method = RequestMethod.POST)
     public String getsections(HttpServletRequest form) throws JsonProcessingException {
 
         if      (  (form.getParameter("name") == null)
@@ -324,6 +324,54 @@ public class SectionController {
         rf.setSuccess();
         rf.setErrortype("none");
         rf.setMessage("Section successfully edited.");
+        return obm.writeValueAsString(rf);
+    }
+
+    @RequestMapping(value ="/section/get/curators", method = RequestMethod.POST)
+    public String getcurators(HttpServletRequest form) throws JsonProcessingException
+    {
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("sectid")==null)
+                || (form.getParameter("sectid").equals("")))
+        {
+            rf.setError();
+            rf.setErrortype("NotEnoughDataError");
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<1)
+        {
+            rf.setError();
+            rf.setErrortype("AccessDenyError");
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        section check;
+        check  = sectr.getBySid(Integer.parseInt(form.getParameter("sectid")));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype("NoSectionError");
+            rf.setMessage("Section with this name does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+
+        List<user> curators = check.getCurators();
+        rf.setContent(curators);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Curators successfully sended.");
         return obm.writeValueAsString(rf);
     }
 }

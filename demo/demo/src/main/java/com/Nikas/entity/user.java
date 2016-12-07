@@ -45,6 +45,16 @@ public class user implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator",cascade = CascadeType.ALL)
     private List<topic> createdtopics;
 
+    @ManyToMany
+    @JoinTable(name="curator",schema = "private",
+            joinColumns = @JoinColumn(name="uid", referencedColumnName="uid"),
+            inverseJoinColumns = @JoinColumn(name="sid", referencedColumnName="sid")
+    )
+    @JsonIgnore
+    private List<section> sections;
+
+
+
     public user(){};
     public user(UUID id, String usr, String pass)
     {
@@ -52,6 +62,9 @@ public class user implements Serializable {
         this.name = usr;
         this.password=pass;
     };
+
+    public List<section> getSections(){return sections;}
+    public void setSections(List<section> lst){sections = lst;}
     public List<topic> getCreatedtopics(){return createdtopics;}
     public void setCreatedtopics(List<topic> pm){createdtopics = pm;}
     public List<privatemessage> getReceivedmessages(){return receivedmessages;}

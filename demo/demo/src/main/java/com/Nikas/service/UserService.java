@@ -1,5 +1,6 @@
 package com.Nikas.service;
 
+import com.Nikas.entity.section;
 import com.Nikas.entity.user;
 import com.Nikas.pojo.respForm;
 
@@ -19,4 +20,5 @@ public interface UserService {
     user editUser(user usr);
     List<user> getAll();
     respForm checkLogindata(String name, String pass);
+    user addSection(user usr, section sect);
 }

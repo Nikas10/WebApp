@@ -119,7 +119,7 @@ public class TopicController {
 
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Section successfully added.");
+        rf.setMessage("Topic successfully added.");
         return obm.writeValueAsString(rf);
     }
 
@@ -176,7 +176,7 @@ public class TopicController {
         tps.deleteTopic(check);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Section successfully deleted.");
+        rf.setMessage("Topic successfully deleted.");
         return obm.writeValueAsString(rf);
     }
 
@@ -257,7 +257,7 @@ public class TopicController {
         tps.editTopic(check);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Section successfully edited.");
+        rf.setMessage("Topic successfully edited.");
         return obm.writeValueAsString(rf);
     }
 
@@ -306,7 +306,7 @@ public class TopicController {
         rf.setContent(lst);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Section successfully deleted.");
+        rf.setMessage("Topic successfully deleted.");
         return obm.writeValueAsString(rf);
     }
     @RequestMapping(value="/topic/get/id",method= RequestMethod.POST)
@@ -354,7 +354,7 @@ public class TopicController {
         rf.setContent(lst);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Section successfully sended.");
+        rf.setMessage("Topic successfully sended.");
         return obm.writeValueAsString(rf);
     }
 
@@ -408,7 +408,7 @@ public class TopicController {
         rf.setContent(lst);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Sections successfully sended.");
+        rf.setMessage("Topics successfully sended.");
         return obm.writeValueAsString(rf);
     }
     @RequestMapping(value="/topic/get/user",method= RequestMethod.POST)
@@ -461,7 +461,7 @@ public class TopicController {
         rf.setContent(lst);
         rf.setSuccess();
         rf.setErrortype("none");
-        rf.setMessage("Sections successfully sended.");
+        rf.setMessage("Topics successfully sended.");
         return obm.writeValueAsString(rf);
     }
 }

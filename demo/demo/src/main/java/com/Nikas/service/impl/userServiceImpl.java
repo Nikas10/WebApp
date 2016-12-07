@@ -1,5 +1,6 @@
 package com.Nikas.service.impl;
 
+import com.Nikas.entity.section;
 import com.Nikas.entity.user;
 
 import com.Nikas.pojo.enums.KnownExceptions;
@@ -93,5 +94,14 @@ public class userServiceImpl implements UserService {
             rf.setMessage("User not found. Check your username or register.");
             return rf;
         }
+    };
+
+    @Override
+    public user addSection(user usr,section sect)
+    {
+        List<section> lst = usr.getSections();
+        lst.add(sect);
+        usr.setSections(lst);
+        return usrRepo.saveAndFlush(usr);
     };
 }

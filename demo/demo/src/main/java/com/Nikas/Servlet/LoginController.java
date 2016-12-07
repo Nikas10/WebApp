@@ -1,9 +1,12 @@
 package com.Nikas.Servlet;
 
 
+import com.Nikas.entity.section;
 import com.Nikas.entity.user;
+import com.Nikas.pojo.enums.KnownExceptions;
 import com.Nikas.pojo.logForm;
 import com.Nikas.pojo.respForm;
+import com.Nikas.service.impl.sectionServiceImpl;
 import com.Nikas.service.impl.userServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +24,10 @@ public class LoginController
 {
     @Resource(name="UserService")
     userServiceImpl usi;
+
+    @Resource(name="SectionService")
+    sectionServiceImpl sectr;
+
 
     public logForm lf = new logForm();
     public respForm rf = new respForm();
@@ -304,5 +311,197 @@ public class LoginController
         rf.setMessage("User successfully deleted.");
         return obm.writeValueAsString(rf);
     }
+
+
+    @RequestMapping(value="/user/add/curated", method= RequestMethod.POST)
+    public  String addcurated(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                || (form.getParameter("sectid")==null)
+                || (form.getParameter("sectid").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<2)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if (check.getLevel()<2)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        section sect = sectr.getBySid(Integer.parseInt(form.getParameter("sectid")));
+        if (sect==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoSectionException);
+            rf.setMessage("Section with that id does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        List<section> lst = check.getSections();
+        lst.add(sect);
+        check.setSections(lst);
+        usi.editUser(check);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("User successfully modified.");
+        return obm.writeValueAsString(rf);
+    }
+
+
+    @RequestMapping(value="/user/get/curated", method= RequestMethod.POST)
+    public  String curatedbyuser(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<2)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if (check.getLevel()>usr.getLevel())
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        List<section> lst = check.getSections();
+        rf.setContent(lst);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Sections successfully sended.");
+        return obm.writeValueAsString(rf);
+    }
+
+    @RequestMapping(value="/user/delete/curated", method= RequestMethod.POST)
+    public  String deletecurated(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                || (form.getParameter("sectid")==null)
+                || (form.getParameter("sectid").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<2)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if (check.getLevel()>usr.getLevel())
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        section sect = sectr.getBySid(Integer.parseInt(form.getParameter("sectid")));
+        if (sect==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoSectionException);
+            rf.setMessage("Section with that id does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        List<section> lst = check.getSections();
+        lst.remove(sect);
+        check.setSections(lst);
+        usi.editUser(check);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("User successfully modified.");
+        return obm.writeValueAsString(rf);
+    }
+
 
 }

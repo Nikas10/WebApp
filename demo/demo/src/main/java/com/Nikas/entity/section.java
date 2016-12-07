@@ -42,6 +42,12 @@ public class section implements Serializable{
     @JsonIgnore
     private List<section> sections;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "sections")
+    @JsonIgnore
+    private List<user> curators;
+
+    public List<user> getCurators(){return curators;}
+    public void setCurators(List<user> lst){curators = lst;}
     public List<section> getSections(){return sections;}
     public void setSections(List<section> scs){sections=scs;}
     public List<topic> getTopics(){return topics;}
