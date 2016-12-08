@@ -19,12 +19,12 @@ public class topic implements Serializable {
     @Column(name="tid")
     private Integer tid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="sid", nullable = false)
     @JsonIgnore
     private section sectid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="uid", nullable = false)
     private user creator;
 

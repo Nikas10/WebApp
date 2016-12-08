@@ -140,6 +140,14 @@ public class SectionController {
             rf.setMessage("Section with this name does not exists.");
             return obm.writeValueAsString(rf);
         }
+        List<user>curators = check.getCurators();
+        if (!curators.contains(usr)||(usr.getLevel()<3))
+        {
+            rf.setError();
+            rf.setErrortype("AccessDenyError");
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
         sectr.deleteSection ( check.getSid() );
         rf.setSuccess();
         rf.setErrortype("none");
@@ -282,6 +290,14 @@ public class SectionController {
             rf.setError();
             rf.setErrortype("NoSectionError");
             rf.setMessage("Section with the same name does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        List<user>curators = check.getCurators();
+        if (!curators.contains(usr)||(usr.getLevel()<3))
+        {
+            rf.setError();
+            rf.setErrortype("AccessDenyError");
+            rf.setMessage("You don't have enough rights to do this operation.");
             return obm.writeValueAsString(rf);
         }
         if ((form.getParameter("newname")!=null)&&(!form.getParameter("newname").equals(""))) {

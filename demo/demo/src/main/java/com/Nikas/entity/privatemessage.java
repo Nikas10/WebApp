@@ -1,5 +1,7 @@
 package com.Nikas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -9,19 +11,19 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name="privatemessage",schema="private")
-public class privatemessage {
+public class privatemessage implements Serializable {
 
 
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        @Column(name = "pmid")
-        private Integer pmid;
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        @Column(name = "prmid")
+        private Integer prmid;
 
-        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name="recid",nullable = false)
         private user receiver;
 
-        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name="sendid",nullable = false)
         private user sender;
 
@@ -39,8 +41,8 @@ public class privatemessage {
 
         public Boolean getViewed(){return viewed;}
         public void setViewed(Boolean bl){viewed=bl;}
-        public Integer getPmid(){return pmid;}
-        public void setPmid(Integer pmi){pmid=pmi;}
+        public Integer getPrmid(){return prmid;}
+        public void setPrmid(Integer pmi){prmid=pmi;}
         public user getReceiver(){return receiver;}
         public void setReceiver(user us){receiver=us;}
         public user getSender(){return sender;}

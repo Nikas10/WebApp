@@ -23,7 +23,7 @@ public class section implements Serializable{
     @Column(name="sid")
     private Integer sid;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="parent")
     @JsonIgnore
     private section parsect;

@@ -16,6 +16,8 @@ public enum KnownExceptions {
     NoSectionException,
     TopicExistsException,
     NoTopicException,
-    NoMessageException
+    NoMessageException,
+    UsrBlackListedException,
+    NoPMessageException
 
 }

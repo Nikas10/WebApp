@@ -20,11 +20,11 @@ public class message implements Serializable {
     @Column(name = "pmid")
     private Integer pmid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="uid",nullable = false)
     private user usr;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name="tid",nullable = false)
     private topic tpc;

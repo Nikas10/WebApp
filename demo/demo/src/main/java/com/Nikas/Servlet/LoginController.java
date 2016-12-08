@@ -371,6 +371,13 @@ public class LoginController
             return obm.writeValueAsString(rf);
         }
         List<section> lst = check.getSections();
+        if (lst.contains(sect))
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.UserExistsException);
+            rf.setMessage("User with that id already exists in the list.");
+            return obm.writeValueAsString(rf);
+        }
         lst.add(sect);
         check.setSections(lst);
         usi.editUser(check);
@@ -406,7 +413,7 @@ public class LoginController
             return obm.writeValueAsString(rf);
         }
         user usr = usi.getByName(lf.getName());
-        if (usr.getLevel()<2)
+        if (usr.getLevel()<1)
         {
             rf.setError();
             rf.setErrortype(KnownExceptions.AccessDenyException);
@@ -503,5 +510,171 @@ public class LoginController
         return obm.writeValueAsString(rf);
     }
 
+    @RequestMapping(value="/user/get/blacklist", method= RequestMethod.POST)
+    public  String getblacklisted(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<1)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if (check.getLevel()>usr.getLevel())
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        List<user> lst = check.getBanned();
+        rf.setContent(lst);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Blacklist successfully sended.");
+        return obm.writeValueAsString(rf);
+    }
 
+    @RequestMapping(value="/user/add/blacklist", method= RequestMethod.POST)
+    public  String addblacklisted(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<1)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        if (check.getLevel()>usr.getLevel())
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        List<user> banned = usr.getBanned();
+        if (banned.contains(check))
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.UserExistsException);
+            rf.setMessage("User with that name already exists in the list.");
+            return obm.writeValueAsString(rf);
+        }
+        banned.add(check);
+        usr.setBanned(banned);
+        usi.editUser(usr);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Blacklist successfully modified.");
+        return obm.writeValueAsString(rf);
+    }
+    @RequestMapping(value="/user/delete/blacklist", method= RequestMethod.POST)
+    public  String delfromblacklisted(HttpServletRequest form) throws JsonProcessingException
+    {
+        ObjectMapper obm = new ObjectMapper();
+        if      (  (form.getParameter("name") == null)
+                || (form.getParameter("name").equals(""))
+                || (form.getParameter("pass") == null)
+                || (form.getParameter("pass").equals(""))
+                || (form.getParameter("username")==null)
+                || (form.getParameter("username").equals(""))
+                )
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NotEnoughDataException);
+            rf.setMessage("Some required fields are empty");
+            return obm.writeValueAsString(rf);
+        }
+        lf.setName(form.getParameter("name"));
+        lf.setPass(form.getParameter("pass"));
+        rf= usi.checkLogindata(lf.getName(),lf.getPass());
+        if (rf.getStatus().equals("error"))
+        {
+            return obm.writeValueAsString(rf);
+        }
+        user usr = usi.getByName(lf.getName());
+        if (usr.getLevel()<1)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.AccessDenyException);
+            rf.setMessage("You don't have enough rights to do this operation.");
+            return obm.writeValueAsString(rf);
+        }
+        user check = usi.getByName(form.getParameter("username"));
+        if (check==null)
+        {
+            rf.setError();
+            rf.setErrortype(KnownExceptions.NoUserException);
+            rf.setMessage("User with that username does not exists.");
+            return obm.writeValueAsString(rf);
+        }
+        List<user> banned = usr.getBanned();
+        banned.remove(check);
+        usr.setBanned(banned);
+        usi.editUser(usr);
+        rf.setSuccess();
+        rf.setErrortype("none");
+        rf.setMessage("Blacklist successfully modified.");
+        return obm.writeValueAsString(rf);
+    }
 }

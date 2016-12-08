@@ -32,17 +32,21 @@ public class user implements Serializable {
     @Column (name = "about")
     private String about;
 
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usr",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<message> publicmsgs;
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<privatemessage> receivedmessages;
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender",cascade = CascadeType.ALL)
-    private List<privatemessage> sendedmessages;
     @JsonIgnore
+    private List<privatemessage> sendedmessages;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<topic> createdtopics;
 
     @ManyToMany
@@ -52,6 +56,18 @@ public class user implements Serializable {
     )
     @JsonIgnore
     private List<section> sections;
+
+    @ManyToMany
+    @JoinTable(name="blacklist",schema = "private",
+            joinColumns = @JoinColumn(name="blockerid", referencedColumnName="uid"),
+            inverseJoinColumns = @JoinColumn(name="blockedid", referencedColumnName="uid")
+    )
+    @JsonIgnore
+    private List<user> banned; //(!)who do i blacklist
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "banned")
+    @JsonIgnore
+    private List<user> banners; //(!)who blacklisted me
 
 
 
@@ -63,6 +79,10 @@ public class user implements Serializable {
         this.password=pass;
     };
 
+    public List<user> getBanned(){return banned;}
+    public void setBanned(List<user> ban){banned=ban;}
+    public List<user> getBanners(){return banners;}
+    public void setBanners(List<user> ban){banners=ban;}
     public List<section> getSections(){return sections;}
     public void setSections(List<section> lst){sections = lst;}
     public List<topic> getCreatedtopics(){return createdtopics;}
