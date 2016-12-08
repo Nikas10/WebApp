@@ -49,6 +49,14 @@ public class user implements Serializable {
     @JsonIgnore
     private List<topic> createdtopics;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "moderator",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ban> mybans;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userban",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ban> inbans;
+
     @ManyToMany
     @JoinTable(name="curator",schema = "private",
             joinColumns = @JoinColumn(name="uid", referencedColumnName="uid"),
@@ -79,6 +87,10 @@ public class user implements Serializable {
         this.password=pass;
     };
 
+    public List<ban> getMybans(){return mybans;}
+    public void setMybans(List<ban> lst){mybans=lst;}
+    public List<ban> getInbans(){return inbans;}
+    public void setInbans(List<ban> lst){inbans=lst;}
     public List<user> getBanned(){return banned;}
     public void setBanned(List<user> ban){banned=ban;}
     public List<user> getBanners(){return banners;}

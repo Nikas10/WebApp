@@ -1,10 +1,12 @@
 package com.Nikas.service.impl;
 
+import com.Nikas.entity.ban;
 import com.Nikas.entity.section;
 import com.Nikas.entity.user;
 
 import com.Nikas.pojo.enums.KnownExceptions;
 import com.Nikas.pojo.respForm;
+import com.Nikas.repo.BanRepo;
 import com.Nikas.repo.UserRepo;
 import com.Nikas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class userServiceImpl implements UserService {
 
     @Autowired
     private UserRepo usrRepo;
+    @Autowired
+    private BanRepo brp;
 
     @Override
     public user getByUid(UUID id)
@@ -74,22 +78,27 @@ public class userServiceImpl implements UserService {
             {
                 rf.setStatus("error");
                 rf.setErrortype(KnownExceptions.LoginException);
-                //rf.setErrortype("LoginError");
                 rf.setMessage("Your password or username is invalid.");
                 return rf;
             }
             else
             {
+                List<ban> any = dbo.getInbans();
+                if (any!=null)
+                {
+                    rf.setStatus("error");
+                    rf.setErrortype(KnownExceptions.UserBannedException);
+                    rf.setMessage("User with that name is banned. Wait until tha ban is expired.");
+                    return rf;
+                }
                 rf.setStatus("success");
                 rf.setErrortype(KnownExceptions.none);
-                //rf.setErrortype("none");
                 rf.setMessage("Login successful.");
                 return rf;
             }
         }
         {
             rf.setStatus("error");
-            //rf.setErrortype("NoUserError");
             rf.setErrortype(KnownExceptions.NoUserException);
             rf.setMessage("User not found. Check your username or register.");
             return rf;

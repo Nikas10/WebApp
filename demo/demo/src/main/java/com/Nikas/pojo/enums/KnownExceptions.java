@@ -18,6 +18,8 @@ public enum KnownExceptions {
     NoTopicException,
     NoMessageException,
     UsrBlackListedException,
-    NoPMessageException
+    NoPMessageException,
+    NoBanException,
+    UserBannedException
 
 }
